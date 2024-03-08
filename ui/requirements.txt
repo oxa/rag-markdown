@@ -1,0 +1,13 @@
+GitPython==3.1.42
+langchain==0.1.11
+langchain_community==0.0.27
+langchain_core==0.1.30
+langchain_text_splitters==0.0.1
+ollama==0.1.7
+qdrant_client==1.8.0
+streamlit==1.32.0
+python-dotenv==1.0.1
+sentence-transformers==2.4.0
+openai==1.12.0
+tiktoken==0.6.0
+langchain_openai==0.0.8
