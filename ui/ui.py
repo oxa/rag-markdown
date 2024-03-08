@@ -117,10 +117,10 @@ def collection():
                         docs.extend(markdown_splitter.split_text(file.read()))
                 
                 st.write('Saving the collection 📚')
-                if collection.embedding_model == "OpenAI":
+                if _embedding_model == "OpenAI":
                     embeddings = OpenAIEmbeddings()
                 else:
-                    embeddings = HuggingFaceEmbeddings(model_name=collection.embedding_model)
+                    embeddings = HuggingFaceEmbeddings(model_name=_embedding_model)
                 
                 db = Qdrant.from_documents(
                     docs,
@@ -158,6 +158,7 @@ index = {
 
 embedding_models = list_huggingface_local_models()
 embedding_models.append("OpenAI")
+embedding_models.append("⬇️ Download a new model...")
 llm_models = [model['name'] for model in ollama.list()["models"]]
 llm_models.append("OpenAI")
 Qclient = QdrantClient(url=QDRANT_URL)
@@ -165,13 +166,15 @@ collections = [collection.name for collection in Qclient.get_collections().colle
 Qclient.close()
 
 
-
-_demo_name = st.sidebar.selectbox("RAG", index.keys())
+_demo_name = st.sidebar.selectbox("Navigation", index.keys())
 
 st.sidebar.write("## VectorDB")
 _vector_db_collection = st.sidebar.selectbox("Available Collections", collections)
 st.sidebar.write("## Embedding")
 _embedding_model = st.sidebar.selectbox("Model", embedding_models)
+if _embedding_model == "⬇️ Download a new model...":
+    _embedding_model = st.sidebar.text_input("HuggingFace model Name",value="intfloat/multilingual-e5-large-instruct")
+
 _semantichunk = st.sidebar.checkbox("Use Semantic Chunker",disabled=True)
 st.sidebar.write("## Inference Model")
 _llm_model = st.sidebar.selectbox("LLM", llm_models)
